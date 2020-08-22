@@ -1,7 +1,7 @@
 ################################################################
 # The 19.06 release is the latest NGC release based on Xenial, required
 # for Mupen64plus building. Might work with newer OS versions too.
-FROM nvcr.io/nvidia/pytorch:19.06-py3 AS base
+FROM 1.6.0-cuda10.1-cudnn7-runtime AS base
 
 
 # Setup environment variables in a single layer
