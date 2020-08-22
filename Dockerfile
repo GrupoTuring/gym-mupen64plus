@@ -1,7 +1,7 @@
 ################################################################
 # The 19.06 release is the latest NGC release based on Xenial, required
 # for Mupen64plus building. Might work with newer OS versions too.
-FROM 1.6.0-cuda10.1-cudnn7-runtime AS base
+FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime AS base
 
 
 # Setup environment variables in a single layer
@@ -20,9 +20,13 @@ FROM base AS buildstuff
 RUN apt-get update && \
     apt-get install -y \
         build-essential dpkg-dev libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev \
-        libsdl1.2-dev libgstreamer-plugins-base0.10-dev libnotify-dev freeglut3 freeglut3-dev \
-        libjson-c2 libjson-c-dev \
+        libsdl1.2-dev libgstreamer-plugins-base1.0-dev libnotify-dev freeglut3 freeglut3-dev \
+        libjson-c-dev \
         git
+
+RUN libjson=libjson-c2_0.11-4ubuntu2.6_amd64.deb && \
+        curl "http://security.ubuntu.com/ubuntu/pool/main/j/json-c/$libjson" -o $libjson && \
+        dpkg -i $libjson
 
 # clone, build, and install the input bot
 # (explicitly specifying commit hash to attempt to guarantee behavior within this container)
@@ -49,7 +53,7 @@ RUN apt-get update && \
         wget \
         xvfb libxv1 x11vnc \
         imagemagick \
-        mupen64plus \
+        mupen64plus-ui-console \
         nano \
         ffmpeg
 
