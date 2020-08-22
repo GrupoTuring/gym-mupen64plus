@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='gym_mupen64plus',
-      version='0.0.3',
+      version='0.1.0-turing',
       install_requires=['gym==0.17.2',
                         'numpy==1.16.2',
                         'PyYAML==5.1',
