@@ -14,19 +14,21 @@ ENV \
     DISPLAY=:0
 
 
+RUN apt-get update && \
+        apt-get install -y wget && \
+        libjson=libjson-c2_0.11-4ubuntu2.6_amd64.deb && \
+        wget "http://security.ubuntu.com/ubuntu/pool/main/j/json-c/$libjson" && \
+        dpkg -i "$libjson"
+
+
 ################################################################
 FROM base AS buildstuff
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN apt-get install -y \
         build-essential dpkg-dev libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev \
         libsdl1.2-dev libgstreamer-plugins-base1.0-dev libnotify-dev freeglut3 freeglut3-dev \
         libjson-c-dev \
         git
-
-RUN libjson=libjson-c2_0.11-4ubuntu2.6_amd64.deb && \
-        curl "http://security.ubuntu.com/ubuntu/pool/main/j/json-c/$libjson" -o $libjson && \
-        dpkg -i $libjson
 
 # clone, build, and install the input bot
 # (explicitly specifying commit hash to attempt to guarantee behavior within this container)
@@ -47,10 +49,7 @@ FROM base
 
 
 # Update package cache and install dependencies
-RUN apt-get update && \
-    apt-get install -y \
-        libjson-c2 \
-        wget \
+RUN apt-get install -y \
         xvfb libxv1 x11vnc \
         imagemagick \
         mupen64plus-ui-console \
@@ -67,14 +66,6 @@ RUN wget "https://sourceforge.net/projects/virtualgl/files/${VIRTUALGL_VERSION}/
     apt install ./virtualgl_${VIRTUALGL_VERSION}_amd64.deb && \
     rm virtualgl_${VIRTUALGL_VERSION}_amd64.deb
 
-# Install dependencies (here for caching)
-RUN pip install \
-    gym==0.7.4 \
-    numpy==1.16.2 \
-    PyYAML==5.1 \
-    termcolor==1.1.0 \
-    mss==4.0.2 \
-    opencv-python==4.1.0.25
 
 # Copy compiled input plugin from buildstuff layer
 COPY --from=buildstuff /usr/local/lib/mupen64plus/mupen64plus-input-bot.so /usr/local/lib/mupen64plus/
