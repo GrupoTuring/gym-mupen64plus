@@ -15,10 +15,7 @@ ENV \
 
 
 RUN apt-get update && \
-        apt-get install -y wget && \
-        libjson=libjson-c2_0.11-4ubuntu2.6_amd64.deb && \
-        wget "http://security.ubuntu.com/ubuntu/pool/main/j/json-c/$libjson" && \
-        dpkg -i "$libjson"
+        apt-get install -y wget libjson-c3
 
 
 ################################################################
